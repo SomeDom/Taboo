@@ -1,0 +1,6 @@
+{
+  "parent": "taboo:block/redstone_dust_side",
+  "textures": {
+    "line": "taboo:block/redstone_dust_line0"
+  }
+}

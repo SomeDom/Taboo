@@ -16,7 +16,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-
+        dropSelf(ModBlocks.SALT.get());
     }
 
     @Override
