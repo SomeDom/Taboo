@@ -2,6 +2,8 @@ package net.somedom.taboo.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -34,13 +36,20 @@ public class Salt extends Block {
     private static final VoxelShape WEST_LINE = Block.box(0, 0, 3, 3, 1, 13);
 
     public Salt() {
-        super(BlockBehaviour.Properties.ofFullCopy(Blocks.REDSTONE_WIRE).sound(SoundType.SAND));
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.REDSTONE_WIRE).sound(SoundType.SAND).randomTicks());
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(NORTH, RedstoneSide.NONE)
                 .setValue(EAST, RedstoneSide.NONE)
                 .setValue(SOUTH, RedstoneSide.NONE)
                 .setValue(WEST, RedstoneSide.NONE)
         );
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (level.isRainingAt(pos.above())) {
+            level.removeBlock(pos, false);
+        }
     }
 
     @Override
