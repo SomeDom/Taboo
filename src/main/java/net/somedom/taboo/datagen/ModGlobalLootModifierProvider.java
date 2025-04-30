@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import net.somedom.taboo.Taboo;
@@ -22,6 +23,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
         this.add("salt_from_shipwreck",
         new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/shipwreck_supply")).build(),
+                LootItemRandomChanceCondition.randomChance(0.8f).build()
         }, ModItems.SALT.get()));
     }
 }
