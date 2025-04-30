@@ -14,7 +14,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(ModBlocks.SALT);
+        //blockWithItem(ModBlocks.SALT);
     }
 
     private void blockWithItem(DeferredBlock<?> deferredBlock) {
