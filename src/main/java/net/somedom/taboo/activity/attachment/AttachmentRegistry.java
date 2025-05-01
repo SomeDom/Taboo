@@ -12,13 +12,16 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class AttachmentRegistry {
+    public static final DeferredRegister<AttachmentType<?>> CHUNK_ATTACHMENTS = DeferredRegister.create(
+            NeoForgeRegistries.ATTACHMENT_TYPES, Taboo.MOD_ID
+    );
 
-    public static final DeferredRegister<AttachmentType<?>> CHUNK_ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Taboo.MOD_ID);
-
-    public static final Supplier<AttachmentType<Map<String, Integer>>> ACTIVITY = CHUNK_ATTACHMENTS.register("activity",
+    public static final Supplier<AttachmentType<Map<String, Integer>>> ACTIVITY = CHUNK_ATTACHMENTS.register(
+            "activity",
             () -> AttachmentType.<Map<String, Integer>>builder(() -> new HashMap<>())
                     .serialize(Codec.unboundedMap(Codec.STRING, Codec.INT))
-                    .build());
+                    .build()
+    );
 
     public static void register(IEventBus eventBus)
     {
