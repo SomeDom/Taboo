@@ -20,8 +20,8 @@ public class TabooActivity {
     public static void onEntityDeath(LivingDeathEvent event) {
         if(event.getEntity().level() instanceof ServerLevel serverLevel) {
             if (event.getSource().is(DamageTypes.FALL)) {
-
-                serverLevel.setBlock(event.getEntity().blockPosition(), Blocks.SLIME_BLOCK.defaultBlockState(), 3); //debug
+                // debug
+                serverLevel.setBlock(event.getEntity().blockPosition(), Blocks.SLIME_BLOCK.defaultBlockState(), 3);
 
                 BlockPos deathPos = event.getEntity().blockPosition();
                 ChunkAccess chunk = serverLevel.getChunk(deathPos);
