@@ -14,6 +14,8 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.somedom.taboo.activity.TabooActivity;
+import net.somedom.taboo.activity.attachment.AttachmentRegistry;
 import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
@@ -42,6 +44,8 @@ public class Taboo {
         ModBlocks.register(modEventBus);
 
         ModLootModifiers.register(modEventBus);
+
+        AttachmentRegistry.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
