@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.somedom.taboo.activity.TabooActivity;
 import net.somedom.taboo.activity.attachment.AttachmentRegistry;
 import net.somedom.taboo.block.ModBlocks;
+import net.somedom.taboo.entity.ModEntities;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
 import org.slf4j.Logger;
@@ -42,9 +43,9 @@ public class Taboo {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModEntities.register(modEventBus);
 
         ModLootModifiers.register(modEventBus);
-
         AttachmentRegistry.register(modEventBus);
 
         // Register the item to a creative tab
