@@ -13,8 +13,6 @@ import net.somedom.taboo.activity.attachment.AttachmentRegistry;
 
 import java.util.Map;
 
-enum tabooActivityType {POLTER};
-
 @EventBusSubscriber(modid = Taboo.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class TabooActivity {
 
@@ -22,13 +20,14 @@ public class TabooActivity {
     public static void onEntityDeath(LivingDeathEvent event) {
         if(event.getEntity().level() instanceof ServerLevel serverLevel) {
             if (event.getSource().is(DamageTypes.FALL)) {
-                serverLevel.setBlock(event.getEntity().blockPosition(), Blocks.SLIME_BLOCK.defaultBlockState(), 3);
+
+                serverLevel.setBlock(event.getEntity().blockPosition(), Blocks.SLIME_BLOCK.defaultBlockState(), 3); //debug
+
                 BlockPos deathPos = event.getEntity().blockPosition();
                 ChunkAccess chunk = serverLevel.getChunk(deathPos);
-
                 Map<String, Integer> activity = chunk.getData(AttachmentRegistry.ACTIVITY);
-                activity.put("POLTER", activity.getOrDefault("POLTER", 0)+5);
 
+                activity.put("POLTER", activity.getOrDefault("POLTER", 0)+5);
                 chunk.setData(AttachmentRegistry.ACTIVITY, activity);
             }
         }
