@@ -27,7 +27,7 @@ public class TabooActivity {
                 ChunkAccess chunk = serverLevel.getChunk(deathPos);
 
                 Map<String, Integer> activity = chunk.getData(AttachmentRegistry.ACTIVITY);
-                activity.put("POLTER", +5);
+                activity.put("POLTER", activity.getOrDefault("POLTER", 0)+5);
 
                 chunk.setData(AttachmentRegistry.ACTIVITY, activity);
             }
