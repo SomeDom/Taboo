@@ -1,4 +1,4 @@
-package net.somedom.taboo.activity;
+package net.somedom.taboo.activity.events;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -14,10 +14,11 @@ import net.somedom.taboo.activity.attachment.AttachmentRegistry;
 import java.util.HashMap;
 
 @EventBusSubscriber(modid = Taboo.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-public class TabooActivity {
-
+public class DeathEvents {
     @SubscribeEvent
-    public static void onEntityDeath(LivingDeathEvent event) {
+    public static void onLivingDeath(LivingDeathEvent event) {
+
+        // Villager
         if (event.getEntity().level() instanceof ServerLevel serverLevel && event.getEntity() instanceof Villager) {
             if (!event.getSource().is(DamageTypes.PLAYER_ATTACK)) {
                 return;
@@ -32,5 +33,7 @@ public class TabooActivity {
             chunk.setData(AttachmentRegistry.ACTIVITY, activity);
             chunk.setUnsaved(true);
         }
+
+        // Whatever
     }
 }
