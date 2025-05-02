@@ -14,6 +14,9 @@ public class ModItems {
     public static final DeferredItem<BlockItem> SALT  = ITEMS.register("salt",
             () -> new BlockItem(ModBlocks.SALT.get(), new Item.Properties()));
 
+    public static final DeferredItem<Item> EMF_READER = ITEMS.register("emf_reader",
+            () -> new EmfReader(new Item.Properties().stacksTo(1)));
+
 
 
     public static void register(IEventBus eventBus) {
