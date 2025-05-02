@@ -9,9 +9,6 @@ import net.minecraft.world.level.Level;
 
 public class SpiritEntity extends Monster {
 
-    public static final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
-
     public SpiritEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
