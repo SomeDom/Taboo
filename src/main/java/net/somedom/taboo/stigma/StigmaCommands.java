@@ -74,7 +74,7 @@ public class StigmaCommands {
                         )
                 )
 
-                // Clear Stigma
+                // Clear stigma
                 .then(Commands.literal("clear")
                         .then(Commands.argument("targets", EntityArgument.players())
                                 .executes(ctx -> {
@@ -87,6 +87,12 @@ public class StigmaCommands {
                                     return 1;
                                 })
                         )
+                        .executes(ctx -> {
+                            ServerPlayer player = ctx.getSource().getPlayerOrException();
+                            StigmaManager.clearStigma(player);
+                            ctx.getSource().sendSystemMessage(Component.literal("Cleared your Stigma"));
+                            return 1;
+                        })
                 )
         );
     }
