@@ -24,7 +24,7 @@ public class StigmaCommands {
                                     targets.forEach(player -> {
                                         int stigma = StigmaManager.getStigma(player);
                                         ctx.getSource().sendSystemMessage(Component.literal(
-                                                player.getName().getString() + "'s Stigma: " + stigma));
+                                                player.getName().getString() + "'s Stigma is " + stigma));
                                     });
                                     return 1;
                                 })
@@ -32,7 +32,7 @@ public class StigmaCommands {
                         .executes(ctx -> {
                             ServerPlayer player = ctx.getSource().getPlayerOrException();
                             int stigma = StigmaManager.getStigma(player);
-                            ctx.getSource().sendSystemMessage(Component.literal("Your Stigma: " + stigma));
+                            ctx.getSource().sendSystemMessage(Component.literal("Your Stigma is " + stigma));
                             return 1;
                         })
                 )

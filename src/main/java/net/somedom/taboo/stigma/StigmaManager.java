@@ -2,14 +2,24 @@ package net.somedom.taboo.stigma;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 public class StigmaManager {
 
     private static final String STIGMA_TAG = "taboo_stigma";
 
+    // Use persistent player data that survives death
+    private static CompoundTag getPersistentData(ServerPlayer player) {
+        CompoundTag persistentData = player.getPersistentData();
+        if (!persistentData.contains(Player.PERSISTED_NBT_TAG)) {
+            persistentData.put(Player.PERSISTED_NBT_TAG, new CompoundTag());
+        }
+        return persistentData.getCompound(Player.PERSISTED_NBT_TAG);
+    }
+
     public static int getStigma(ServerPlayer player) {
-        CompoundTag tag = player.getPersistentData();
-        return tag.getInt(STIGMA_TAG);
+        CompoundTag data = getPersistentData(player);
+        return data.getInt(STIGMA_TAG);
     }
 
     public static void addStigma(ServerPlayer player, int amount) {
@@ -18,8 +28,8 @@ public class StigmaManager {
     }
 
     public static void setStigma(ServerPlayer player, int value) {
-        CompoundTag tag = player.getPersistentData();
-        tag.putInt(STIGMA_TAG, value);
+        CompoundTag data = getPersistentData(player);
+        data.putInt(STIGMA_TAG, value);
     }
 
     public static void clearStigma(ServerPlayer player) {
