@@ -1,4 +1,4 @@
-package net.somedom.taboo.stigma;
+package net.somedom.taboo.manifestation.stigma;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -63,7 +63,7 @@ public class StigmaCommands {
                                             Collection<ServerPlayer> targets = EntityArgument.getPlayers(ctx, "targets");
                                             int amount = IntegerArgumentType.getInteger(ctx, "amount");
                                             targets.forEach(player -> {
-                                                StigmaManager.addStigma(player, amount);
+                                                StigmaManager.addStigma(player, amount, false);
                                                 int newStigma = StigmaManager.getStigma(player);
                                                 ctx.getSource().sendSystemMessage(Component.literal(
                                                         "Added " + amount + " Stigma to " + player.getName().getString()));

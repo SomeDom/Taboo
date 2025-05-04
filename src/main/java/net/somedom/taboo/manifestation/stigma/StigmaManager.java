@@ -1,4 +1,4 @@
-package net.somedom.taboo.stigma;
+package net.somedom.taboo.manifestation.stigma;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,9 +22,11 @@ public class StigmaManager {
         return data.getInt(STIGMA_TAG);
     }
 
-    public static void addStigma(ServerPlayer player, int amount) {
+    public static void addStigma(ServerPlayer player, int amount, boolean applyMultiplier) {
         int current = getStigma(player);
-        setStigma(player, current + amount);
+        float multiplier = applyMultiplier ? StigmaMultiplierManager.StigmaMultiplier(player) : 1.0f;
+        int total = Math.round(amount * multiplier);
+        setStigma(player, current + total);
     }
 
     public static void setStigma(ServerPlayer player, int value) {

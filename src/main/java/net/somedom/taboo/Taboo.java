@@ -18,7 +18,7 @@ import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.entity.ModEntities;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
-import net.somedom.taboo.stigma.StigmaCommands;
+import net.somedom.taboo.manifestation.stigma.StigmaCommands;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file

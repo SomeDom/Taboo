@@ -1,4 +1,4 @@
-package net.somedom.taboo.stigma;
+package net.somedom.taboo.manifestation.stigma;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,31 +33,31 @@ public class StigmaEventHandler {
 
             if(victim.getType().getCategory() == MobCategory.CREATURE) {
                 if (victim instanceof WanderingTrader) {
-                    StigmaManager.addStigma(player, 10);
+                    StigmaManager.addStigma(player, 10, true);
                 }
                 else {
-                    StigmaManager.addStigma(player, 1);
+                    StigmaManager.addStigma(player, 1, true);
                 }
             }
 
             if (victim.isBaby() && victim.getType().getCategory() != MobCategory.MONSTER) {
                 if (victim.getType().getCategory() == MobCategory.CREATURE) {
-                    StigmaManager.addStigma(player, 4);
+                    StigmaManager.addStigma(player, 4, true);
                 }
                 else {
-                    StigmaManager.addStigma(player, 5);
+                    StigmaManager.addStigma(player, 5, true);
                 }
             }
 
             if (victim instanceof Villager) {
-                StigmaManager.addStigma(player, 10);
+                StigmaManager.addStigma(player, 10, true);
             }
 
             if (
                 victim instanceof Witch ||
                 victim instanceof Evoker
             ) {
-                StigmaManager.addStigma(player, 15);
+                StigmaManager.addStigma(player, 15, true);
             }
         }
     }
@@ -74,14 +74,14 @@ public class StigmaEventHandler {
                 item.getItem() == Items.ROTTEN_FLESH ||
                 item.getItem() == Items.SPIDER_EYE
             ) {
-                StigmaManager.addStigma(player, 3);
+                StigmaManager.addStigma(player, 3, true);
             }
 
             if (
                 item.getItem() == Items.SUSPICIOUS_STEW ||
                 item.getItem() == Items.POTION
             ) {
-                StigmaManager.addStigma(player, 5);
+                StigmaManager.addStigma(player, 5, true);
             }
         }
     }
@@ -98,7 +98,7 @@ public class StigmaEventHandler {
                 item.getItem() == Items.SPLASH_POTION ||
                 item.getItem() == Items.ENDER_EYE
             ) {
-                StigmaManager.addStigma(player, 5);
+                StigmaManager.addStigma(player, 5, true);
             }
         }
     }
@@ -106,19 +106,18 @@ public class StigmaEventHandler {
     @SubscribeEvent
     public static void onDeathByTotem(LivingUseTotemEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            StigmaManager.addStigma(player, 20);
+            StigmaManager.addStigma(player, 20, true);
         }
     }
 
     @SubscribeEvent
     public static void onEnchantItem(PlayerEnchantItemEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            StigmaManager.addStigma(player, 5);
+            StigmaManager.addStigma(player, 5, true);
         }
     }
 
     public static final Map<UUID, Integer> darkTicks = new HashMap<>();
-
 
     @SubscribeEvent
     public static void onServerTickPost(ServerTickEvent.Post event) {
@@ -135,7 +134,7 @@ public class StigmaEventHandler {
             if (lightLevel < 4) {
                 currentTicks++;
                 if (currentTicks >= 600) {
-                    StigmaManager.addStigma(player, 1);
+                    StigmaManager.addStigma(player, 1, true);
                     currentTicks = 0;
                 }
             } else {
