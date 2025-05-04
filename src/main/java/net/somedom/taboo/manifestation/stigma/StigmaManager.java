@@ -8,7 +8,6 @@ public class StigmaManager {
 
     private static final String STIGMA_TAG = "taboo_stigma";
 
-    // Use persistent player data that survives death
     private static CompoundTag getPersistentData(ServerPlayer player) {
         CompoundTag persistentData = player.getPersistentData();
         if (!persistentData.contains(Player.PERSISTED_NBT_TAG)) {
