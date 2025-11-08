@@ -10,7 +10,7 @@ import net.somedom.taboo.entity.custom.WendigoEntity;
 
 public class WendigoRenderer extends MobRenderer<WendigoEntity, WendigoModel<WendigoEntity>> {
     public WendigoRenderer(EntityRendererProvider.Context context) {
-        super(context, new WendigoModel<>(context.bakeLayer(WendigoModel.LAYER_LOCATION)), 0.25f);
+        super(context, new WendigoModel<>(context.bakeLayer(WendigoModel.LAYER_LOCATION)), 0.5f);
     }
 
     @Override

@@ -40,13 +40,13 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_leg = body.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(16, 38).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -15.0F, 0.0F));
+        PartDefinition right_leg = body.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(16, 38).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 9.0F, 0.0F));
 
-        PartDefinition left_leg = body.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(32, 38).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -15.0F, 0.0F));
+        PartDefinition left_leg = body.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(32, 38).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 9.0F, 0.0F));
 
-        PartDefinition torso_bone = body.addOrReplaceChild("torso_bone", CubeListBuilder.create(), PartPose.offset(0.0F, -15.0F, 0.0F));
+        PartDefinition torso_bone = body.addOrReplaceChild("torso_bone", CubeListBuilder.create(), PartPose.offset(0.0F, 9.0F, 0.0F));
 
         PartDefinition torso = torso_bone.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, -14.0F, -2.0F, 8.0F, 14.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -64,7 +64,7 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
 
-        this.animateWalk(WendigoAnimations.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
+        this.animateWalk(WendigoAnimations.walk, limbSwing, limbSwingAmount, 3f, 2.5f);
         this.animate(entity.idleAnimationState, WendigoAnimations.idle, ageInTicks, 1f);
     }
 

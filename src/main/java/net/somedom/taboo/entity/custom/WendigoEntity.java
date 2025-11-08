@@ -28,12 +28,13 @@ public class WendigoEntity extends Monster {
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 50d)
-                .add(Attributes.MOVEMENT_SPEED, 2D);
+                .add(Attributes.MOVEMENT_SPEED, 2D)
+                .add(Attributes.FOLLOW_RANGE, 24D);
     }
 
     private void setupAnimationStates() {
         if(this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = 80;
+            this.idleAnimationTimeout = 60;
             this.idleAnimationState.start(this.tickCount);
         }
         else {
