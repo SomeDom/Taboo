@@ -1,6 +1,7 @@
 package net.somedom.taboo;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -16,6 +17,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.entity.ModEntities;
+import net.somedom.taboo.entity.client.WendigoRenderer;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
 import net.somedom.taboo.manifestation.stigma.StigmaCommands;
@@ -42,9 +44,10 @@ public class Taboo {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
-        ModEntities.register(modEventBus);
 
         ModLootModifiers.register(modEventBus);
+
+        ModEntities.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -77,6 +80,8 @@ public class Taboo {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+
+            EntityRenderers.register(ModEntities.WENDIGO.get(), WendigoRenderer::new);
 
         }
     }

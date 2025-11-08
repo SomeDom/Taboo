@@ -1,4 +1,6 @@
 {
   "block.taboo.salt": "Salt",
-  "item.taboo.emf_reader": "EMF Reader"
+  "item.taboo.emf_reader": "EMF Reader",
+
+  "entity.taboo.wendigo": "Wendigo"
 }

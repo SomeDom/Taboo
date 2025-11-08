@@ -6,7 +6,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.somedom.taboo.Taboo;
-import net.somedom.taboo.entity.custom.SpiritEntity;
+import net.somedom.taboo.entity.custom.WendigoEntity;
 
 import java.util.function.Supplier;
 
@@ -14,9 +14,9 @@ public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Taboo.MOD_ID);
 
-    public static final Supplier<EntityType<SpiritEntity>> SPIRIT =
-            ENTITY_TYPES.register("spirit", () -> EntityType.Builder.of(SpiritEntity::new, MobCategory.MONSTER)
-                    .sized(0.6f, 1.95f).build("spirit"));
+    public static final Supplier<EntityType<WendigoEntity>> WENDIGO =
+            ENTITY_TYPES.register("wendigo", () -> EntityType.Builder.of(WendigoEntity::new, MobCategory.MONSTER)
+                    .sized(0.6f, 2.5f).build("wendigo"));
 
 
     public static void register(IEventBus eventBus) {
