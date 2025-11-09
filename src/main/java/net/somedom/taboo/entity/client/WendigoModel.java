@@ -85,6 +85,6 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
 
     @Override
     public ModelPart root() {
-        return torso_bone;
+        return body;
     }
 }
