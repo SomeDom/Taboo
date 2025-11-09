@@ -16,7 +16,7 @@ public class ModEntities {
 
     public static final Supplier<EntityType<WendigoEntity>> WENDIGO =
             ENTITY_TYPES.register("wendigo", () -> EntityType.Builder.of(WendigoEntity::new, MobCategory.MONSTER)
-                    .sized(0.6f, 2.5f).build("wendigo"));
+                    .sized(0.6f, 2.2f).build("wendigo"));
 
 
     public static void register(IEventBus eventBus) {

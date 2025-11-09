@@ -46,15 +46,21 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
 
         PartDefinition left_leg = body.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(32, 38).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 15.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 9.0F, 0.0F));
 
-        PartDefinition torso_bone = body.addOrReplaceChild("torso_bone", CubeListBuilder.create(), PartPose.offset(0.0F, 9.0F, 0.0F));
+        PartDefinition torso_bone = body.addOrReplaceChild("torso_bone", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0F, 9.0F, 0.0F, 0.3491F, 0.0F, 0.0F));
 
         PartDefinition torso = torso_bone.addOrReplaceChild("torso", CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, -14.0F, -2.0F, 8.0F, 14.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition right_arm = torso_bone.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(0, 34).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 18.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, -12.0F, 0.0F));
+        PartDefinition right_arm = torso_bone.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-6.0F, -12.0F, 0.0F));
 
-        PartDefinition left_arm = torso_bone.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(24, 16).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 18.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(6.0F, -12.0F, 0.0F));
+        PartDefinition right_arm_r1 = right_arm.addOrReplaceChild("right_arm_r1", CubeListBuilder.create().texOffs(0, 34).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 18.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.3491F, 0.0F, 0.0F));
 
-        PartDefinition head = torso_bone.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -14.0F, 0.0F));
+        PartDefinition left_arm = torso_bone.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(6.0F, -12.0F, 0.0F));
+
+        PartDefinition left_arm_r1 = left_arm.addOrReplaceChild("left_arm_r1", CubeListBuilder.create().texOffs(24, 16).addBox(-2.0F, -2.0F, -2.0F, 4.0F, 18.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.3491F, 0.0F, 0.0F));
+
+        PartDefinition head = torso_bone.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -14.0F, 0.0F));
+
+        PartDefinition head_r1 = head.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
@@ -64,13 +70,20 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
 
-        this.animateWalk(WendigoAnimations.walk, limbSwing, limbSwingAmount, 3f, 2.5f);
-        this.animate(entity.idleAnimationState, WendigoAnimations.idle, ageInTicks, 1f);
+        // Base anim: Walk if moving, else idle
+        if (entity.walkAnimationState.isStarted()) {
+            this.animate(entity.walkAnimationState, WendigoAnimations.walk, ageInTicks, 1f);
+        } else {
+            this.animate(entity.idleAnimationState, WendigoAnimations.idle, ageInTicks, 1f);
+        }
+
+        // Attack overrides (applies on top, non-looping so short)
+        this.animate(entity.attackAnimationState, WendigoAnimations.attack, ageInTicks, 1f);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {
         headYaw = Mth.clamp(headYaw, -30f, 30f);
-        headPitch = Mth.clamp(headYaw, -25f, 45);
+        headPitch = Mth.clamp(headPitch, -25f, 45);
 
         this.head.yRot = headYaw * ((float)Math.PI / 180f);
         this.head.xRot = headPitch * ((float)Math.PI / 180f);
