@@ -11,7 +11,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public class WendigoEntity extends Monster {
+public class EchoEntity extends Monster {
 
     public final AnimationState attackAnimationState = new AnimationState();
     public final AnimationState walkAnimationState = new AnimationState();
@@ -19,7 +19,7 @@ public class WendigoEntity extends Monster {
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
-    public WendigoEntity(EntityType<? extends Monster> entityType, Level level) {
+    public EchoEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 

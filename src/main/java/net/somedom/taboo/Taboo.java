@@ -17,7 +17,7 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.entity.ModEntities;
-import net.somedom.taboo.entity.client.WendigoRenderer;
+import net.somedom.taboo.entity.client.EchoRenderer;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
 import net.somedom.taboo.manifestation.stigma.StigmaCommands;
@@ -81,7 +81,7 @@ public class Taboo {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
 
-            EntityRenderers.register(ModEntities.WENDIGO.get(), WendigoRenderer::new);
+            EntityRenderers.register(ModEntities.ECHO.get(), EchoRenderer::new);
 
         }
     }

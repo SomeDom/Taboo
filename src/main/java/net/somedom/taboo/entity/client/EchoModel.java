@@ -10,12 +10,12 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.somedom.taboo.Taboo;
-import net.somedom.taboo.entity.custom.WendigoEntity;
+import net.somedom.taboo.entity.custom.EchoEntity;
 
-public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> {
+public class EchoModel<T extends EchoEntity> extends HierarchicalModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Taboo.MOD_ID, "wendigo"), "main");
+            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Taboo.MOD_ID, "echo"), "main");
     private final ModelPart body;
     private final ModelPart right_leg;
     private final ModelPart left_leg;
@@ -25,7 +25,7 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
     private final ModelPart left_arm;
     private final ModelPart head;
 
-    public WendigoModel(ModelPart root) {
+    public EchoModel(ModelPart root) {
         this.body = root.getChild("body");
         this.right_leg = this.body.getChild("right_leg");
         this.left_leg = this.body.getChild("left_leg");
@@ -66,19 +66,19 @@ public class WendigoModel<T extends WendigoEntity> extends HierarchicalModel<T> 
     }
 
     @Override
-    public void setupAnim(WendigoEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(EchoEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.applyHeadRotation(netHeadYaw, headPitch);
 
         // Base anim: Walk if moving, else idle
         if (entity.walkAnimationState.isStarted()) {
-            this.animate(entity.walkAnimationState, WendigoAnimations.walk, ageInTicks, 1f);
+            this.animate(entity.walkAnimationState, EchoAnimations.walk, ageInTicks, 1f);
         } else {
-            this.animate(entity.idleAnimationState, WendigoAnimations.idle, ageInTicks, 1f);
+            this.animate(entity.idleAnimationState, EchoAnimations.idle, ageInTicks, 1f);
         }
 
         // Attack overrides (applies on top, non-looping so short)
-        this.animate(entity.attackAnimationState, WendigoAnimations.attack, ageInTicks, 1f);
+        this.animate(entity.attackAnimationState, EchoAnimations.attack, ageInTicks, 1f);
     }
 
     private void applyHeadRotation(float headYaw, float headPitch) {
