@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -17,9 +18,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.somedom.taboo.entity.custom.TangoEntity;
 
 import javax.annotation.Nullable;
 
@@ -57,9 +61,9 @@ public class Salt extends Block {
         VoxelShape shape = DOT;
 
         shape = state.getValue(NORTH) != RedstoneSide.NONE ? Shapes.or(shape, NORTH_LINE) : shape;
-        shape = state.getValue(EAST)  != RedstoneSide.NONE ? Shapes.or(shape, EAST_LINE)  : shape;
+        shape = state.getValue(EAST) != RedstoneSide.NONE ? Shapes.or(shape, EAST_LINE) : shape;
         shape = state.getValue(SOUTH) != RedstoneSide.NONE ? Shapes.or(shape, SOUTH_LINE) : shape;
-        shape = state.getValue(WEST)  != RedstoneSide.NONE ? Shapes.or(shape, WEST_LINE)  : shape;
+        shape = state.getValue(WEST) != RedstoneSide.NONE ? Shapes.or(shape, WEST_LINE) : shape;
 
         return shape;
     }
@@ -72,12 +76,11 @@ public class Salt extends Block {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH,EAST,SOUTH,WEST);
+        builder.add(NORTH, EAST, SOUTH, WEST);
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston)
-    {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         if (!state.canSurvive(level, pos)) {
             level.destroyBlock(pos, true);
             return;

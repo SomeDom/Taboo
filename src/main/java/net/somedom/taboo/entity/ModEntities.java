@@ -7,6 +7,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.somedom.taboo.Taboo;
 import net.somedom.taboo.entity.custom.EchoEntity;
+import net.somedom.taboo.entity.custom.TangoEntity;
 
 import java.util.function.Supplier;
 
@@ -18,6 +19,9 @@ public class ModEntities {
             ENTITY_TYPES.register("echo", () -> EntityType.Builder.of(EchoEntity::new, MobCategory.MONSTER)
                     .sized(0.6f, 2.2f).build("echo"));
 
+    public static final Supplier<EntityType<TangoEntity>> TANGO =
+            ENTITY_TYPES.register("tango", () -> EntityType.Builder.of(TangoEntity::new, MobCategory.MONSTER)
+                    .sized(0.6f, 1.8f).build("tango"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

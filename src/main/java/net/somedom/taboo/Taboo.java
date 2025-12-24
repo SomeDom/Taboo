@@ -18,6 +18,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.entity.ModEntities;
 import net.somedom.taboo.entity.client.EchoRenderer;
+import net.somedom.taboo.entity.client.TangoRenderer;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
 import net.somedom.taboo.manifestation.stigma.StigmaCommands;
@@ -82,6 +83,7 @@ public class Taboo {
         public static void onClientSetup(FMLClientSetupEvent event) {
 
             EntityRenderers.register(ModEntities.ECHO.get(), EchoRenderer::new);
+            EntityRenderers.register(ModEntities.TANGO.get(), TangoRenderer::new);
 
         }
     }
