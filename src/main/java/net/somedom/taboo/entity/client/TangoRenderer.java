@@ -40,7 +40,7 @@ public class TangoRenderer extends EntityRenderer<TangoEntity> {
             double speedY = entity.getRandom().nextDouble() * 0.0;
             double speedZ = (entity.getRandom().nextDouble() - 0.5) * 0.05;
 
-            level.addParticle(ParticleTypes.LARGE_SMOKE,
+            level.addParticle(ParticleTypes.SQUID_INK,
                     baseX + offsetX, baseY + offsetY, baseZ + offsetZ,
                     speedX, speedY, speedZ);
         }
