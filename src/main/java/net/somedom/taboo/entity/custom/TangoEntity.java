@@ -1,6 +1,7 @@
 package net.somedom.taboo.entity.custom;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import jdk.jfr.Percentage;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -8,12 +9,15 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
+import net.somedom.taboo.mixin.activity.IActivityExtension;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
@@ -26,7 +30,9 @@ import net.tslat.smartbrainlib.api.core.sensor.custom.UnreachableTargetSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TangoEntity extends PathfinderMob implements SmartBrainOwner <TangoEntity> {
 
@@ -52,6 +58,20 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                 new NearbyBlocksSensor<>(),
                 new UnreachableTargetSensor<>()
         );
+    }
+
+    @Override
+    public Map<Activity, BrainActivityGroup<? extends TangoEntity>> getAdditionalTasks() {
+        Map<Activity, BrainActivityGroup<? extends TangoEntity>> activities = new HashMap<>();
+
+        activities.put(
+                IActivityExtension.STALK,
+                new BrainActivityGroup<TangoEntity>(IActivityExtension.STALK)
+                        .behaviours(
+                                new LookAtAttackTarget<>()
+                        ));
+
+        return activities;
     }
 
     @Override
