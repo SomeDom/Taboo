@@ -20,9 +20,11 @@ import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetPlayerLookTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.SetRandomLookTarget;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.target.TargetOrRetaliate;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
+import net.tslat.smartbrainlib.api.core.sensor.custom.NearbyBlocksSensor;
+import net.tslat.smartbrainlib.api.core.sensor.custom.UnreachableTargetSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
+import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
 
 import java.util.List;
 
@@ -45,7 +47,10 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
     @Override
     public List<ExtendedSensor<TangoEntity>> getSensors() {
         return ObjectArrayList.of(
-                new NearbyLivingEntitySensor<>()
+                new NearbyLivingEntitySensor<>(),
+                new NearbyPlayersSensor<>(),
+                new NearbyBlocksSensor<>(),
+                new UnreachableTargetSensor<>()
         );
     }
 
@@ -53,19 +58,19 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
     public BrainActivityGroup<TangoEntity> getCoreTasks() {
         return BrainActivityGroup.coreTasks(
                 new LookAtTarget<>(),
-                new MoveToWalkTarget<>());
+                new MoveToWalkTarget<>()
+        );
     }
 
     @Override
     public BrainActivityGroup<TangoEntity> getIdleTasks() { // These are the tasks that run when the mob isn't doing anything else (usually)
         return BrainActivityGroup.idleTasks(
                 new FirstApplicableBehaviour<TangoEntity>(      // Run only one of the below behaviours, trying each one in order. Include the generic type because JavaC is silly
-                        new TargetOrRetaliate<>(),            // Set the attack target and walk target based on nearby entities
                         new SetPlayerLookTarget<>(),          // Set the look target for the nearest player
                         new SetRandomLookTarget<>()),         // Set a random look target
                 new OneRandomBehaviour<>(                 // Run a random task from the below options
                         new SetRandomWalkTarget<>(),          // Set a random walk target to a nearby position
-                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60)))); // Do nothing for 1.5->3 seconds
+                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(100, 200)))); // Do nothing for 1.5->3 seconds
     }
 
 

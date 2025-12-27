@@ -21,16 +21,19 @@ public class StigmaManager {
         return data.getInt(STIGMA_TAG);
     }
 
+    public static void setStigma(ServerPlayer player, int value) {
+        if (value > 100) {
+            value = 100;
+        }
+        CompoundTag data = getPersistentData(player);
+        data.putInt(STIGMA_TAG, value);
+    }
+
     public static void addStigma(ServerPlayer player, int amount, boolean applyMultiplier) {
         int current = getStigma(player);
         float multiplier = applyMultiplier ? StigmaMultiplierManager.StigmaMultiplier(player) : 1.0f;
         int total = Math.round(amount * multiplier);
         setStigma(player, current + total);
-    }
-
-    public static void setStigma(ServerPlayer player, int value) {
-        CompoundTag data = getPersistentData(player);
-        data.putInt(STIGMA_TAG, value);
     }
 
     public static void clearStigma(ServerPlayer player) {
