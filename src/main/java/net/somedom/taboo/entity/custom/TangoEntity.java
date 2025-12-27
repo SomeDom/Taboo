@@ -73,7 +73,6 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                         new Idle<>().runFor(entity -> entity.getRandom().nextInt(100, 200)))); // Do nothing for 1.5->3 seconds
     }
 
-
     @Override
     public boolean hurt(DamageSource damageSource, float v) {
         if (!this.level().isClientSide) {
