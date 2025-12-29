@@ -14,4 +14,16 @@ public interface IActivityExtension {
             new Activity("taboo:stalk")
     );
 
+    Activity FLEE = Registry.register(
+            BuiltInRegistries.ACTIVITY,
+            ResourceLocation.fromNamespaceAndPath(Taboo.MOD_ID, "flee"),
+            new Activity("taboo:flee")
+    );
+
+    Activity POSSESS = Registry.register(
+            BuiltInRegistries.ACTIVITY,
+            ResourceLocation.fromNamespaceAndPath(Taboo.MOD_ID, "possess"),
+            new Activity("taboo:possess")
+    );
+
 }
