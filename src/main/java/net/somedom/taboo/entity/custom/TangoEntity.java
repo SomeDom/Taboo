@@ -9,7 +9,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.somedom.taboo.entity.behavior.PossessNearestLivingEntity;
@@ -21,6 +20,7 @@ import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
+import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
@@ -68,9 +68,9 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                 new BrainActivityGroup<TangoEntity>(Activity.CORE)
                         .priority(10)
                         .behaviours(
+                                new FloatToSurfaceOfFluid<>(),
                                 new LookAtTarget<>(),
                                 new MoveToWalkTarget<>()
-                               // new TangoEntitySwitchToNextAppropriateMood()
                         ));
 
         activities.put(
@@ -80,7 +80,7 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                         .behaviours(
                                 new FirstApplicableBehaviour<TangoEntity>(
                                         new PossessNearestLivingEntity<>()
-                                                .distance(1.0d)
+                                                .distance(1.2d)
                                                 .filter(e -> e instanceof Animal),
                                         new WalkToNearestLivingEntity<>()
                                                 .speedModifier(2.0f)
@@ -102,15 +102,42 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
     }
 
     @Override
-    public boolean startRiding(Entity vehicle) {
+    public boolean displayFireAnimation() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeLeashed() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return false;
+    }
+
+    @Override
+    public boolean startRiding(Entity vehicle, boolean force) {
+        //noPhysics = true;
+        setInvisible(true);
+        setInvulnerable(true);
         getPersistentData().putBoolean("possessing", true);
         vehicle.getPersistentData().putBoolean("tango_possessed", true);
-        return super.startRiding(vehicle);
+
+        return super.startRiding(vehicle, force);
     }
 
     @Override
     public void stopRiding() {
         if (getVehicle() instanceof Entity entity && entity.getPersistentData() != null) {
+            //noPhysics = false;
+            setInvisible(false);
+            setInvulnerable(false);
             getPersistentData().putBoolean("possessing", false);
             entity.getPersistentData().putBoolean("tango_possessed", false);
         }

@@ -40,6 +40,10 @@ public class WalkToNearestLivingEntity<E extends PathfinderMob> extends Extended
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, E entity) {
+        if (entity.isPassenger()) {
+            return false;
+        }
+
         NearestVisibleLivingEntities nearbyEntities = BrainUtils.getMemory(entity, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
 
         if (nearbyEntities == null) return false;
@@ -54,7 +58,7 @@ public class WalkToNearestLivingEntity<E extends PathfinderMob> extends Extended
         if(nearbyEntities != null) {
             LivingEntity target = nearbyEntities.findClosest(this.targetPredicate).orElse(null);
 
-            if (target != null && target != entity) {
+            if (target != null && target != entity && !target.getPersistentData().getBoolean("tango_possessed")) {
                 EntityTracker tracker = new EntityTracker(target, true);
                 WalkTarget walkTarget = new WalkTarget(tracker, this.speedModifier, 1);
 

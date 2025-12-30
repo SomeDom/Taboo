@@ -11,10 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.somedom.taboo.entity.custom.TangoEntity;
 
-import java.util.logging.Level;
-
-import static net.minecraft.util.ParticleUtils.spawnParticles;
-
 public class TangoRenderer extends EntityRenderer<TangoEntity> {
 
     public TangoRenderer(EntityRendererProvider.Context context) {
@@ -26,7 +22,7 @@ public class TangoRenderer extends EntityRenderer<TangoEntity> {
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 
         ClientLevel level = Minecraft.getInstance().level;
-        if (level != null && entity.tickCount % 2 == 0) {
+        if (level != null && entity.tickCount % 2 == 0 && !entity.isPassenger()) {
 
             double baseX = Mth.lerp(partialTick, entity.xo, entity.getX());
             double baseY = Mth.lerp(partialTick, entity.yo + 2, entity.getY());

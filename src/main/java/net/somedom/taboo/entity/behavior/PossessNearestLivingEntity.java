@@ -24,7 +24,7 @@ public class PossessNearestLivingEntity<E extends PathfinderMob> extends Extende
     }
 
     protected Predicate<LivingEntity> targetPredicate = entity -> true;
-    protected double maxPossessDistance = 1.5;
+    protected double maxPossessDistance = 1.0d;
 
     public PossessNearestLivingEntity<E> distance(double distance) {
         this.maxPossessDistance = distance;
@@ -38,6 +38,10 @@ public class PossessNearestLivingEntity<E extends PathfinderMob> extends Extende
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, E entity) {
+        if (entity.isPassenger()) {
+            return false;
+        }
+
         NearestVisibleLivingEntities nearbyEntities = BrainUtils.getMemory(entity, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
         if (nearbyEntities == null) return false;
 
@@ -54,8 +58,9 @@ public class PossessNearestLivingEntity<E extends PathfinderMob> extends Extende
         if (nearbyEntities != null) {
             LivingEntity target = nearbyEntities.findClosest(this.targetPredicate).orElse(null);
 
-            if (target != null && target != entity) {
-                entity.startRiding(target);
+            if (target != null && target != entity && !target.getPersistentData().getBoolean("tango_possessed")) {
+                entity.startRiding(target, true);
+                BrainUtils.clearMemory(entity, MemoryModuleType.WALK_TARGET);
             }
         }
     }

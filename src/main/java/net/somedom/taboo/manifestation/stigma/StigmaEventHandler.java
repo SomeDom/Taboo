@@ -95,10 +95,13 @@ public class StigmaEventHandler {
             if (
                 item.getItem() == Items.ENDER_PEARL ||
                 item.getItem() == Items.LINGERING_POTION ||
-                item.getItem() == Items.SPLASH_POTION ||
                 item.getItem() == Items.ENDER_EYE
             ) {
                 StigmaManager.addStigma(player, 5, true);
+            }
+
+            if (item.getItem() == Items.SPLASH_POTION) {
+                StigmaManager.addStigma(player, 3, true);
             }
         }
     }
