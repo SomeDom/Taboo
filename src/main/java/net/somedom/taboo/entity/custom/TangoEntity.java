@@ -1,7 +1,10 @@
 package net.somedom.taboo.entity.custom;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -13,21 +16,25 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathType;
+import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.entity.behavior.AvoidEntitySpecific;
 import net.somedom.taboo.entity.behavior.PossessNearestLivingEntity;
 import net.somedom.taboo.entity.behavior.WalkToNearestLivingEntity;
+import net.somedom.taboo.manifestation.stigma.StigmaManager;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.attack.AnimatableMeleeAttack;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.FloatToSurfaceOfFluid;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.move.WalkOrRunToWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetRandomWalkTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.path.SetWalkTargetToAttackTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.target.InvalidateAttackTarget;
@@ -46,6 +53,8 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     public TangoEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
+
+        setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0.0F);
     }
 
     @Override
@@ -86,24 +95,60 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
     public BrainActivityGroup<TangoEntity> getIdleTasks() {
         return BrainActivityGroup.idleTasks(
                 new FirstApplicableBehaviour<TangoEntity>(
-                        new TargetOrRetaliate<TangoEntity>().attackablePredicate(entity -> entity instanceof Player).startCondition(entity -> entity.getPersistentData().getBoolean("possessing")),
-                        new PossessNearestLivingEntity<>().distance(1.2d).filter(e -> e instanceof Animal),
-                        new WalkToNearestLivingEntity<>().speedModifier(2.0f).filter(e -> e instanceof Animal),
-                        new AvoidEntitySpecific<>().avoiding(e -> e instanceof Player).noCloserThan(24.0f).stopCaringAfter(24.0f).speedModifier(2.0f)
+                        new TargetOrRetaliate<TangoEntity>()
+                                .attackablePredicate(entity -> {
+                                    if (!(entity instanceof ServerPlayer player)) {
+                                        return false;
+                                    }
+                                    return StigmaManager.getStigma(player) >= 20;
+                                })
+                                .startCondition(entity -> entity.getPersistentData().getBoolean("possessing"))
+                                .cooldownFor(entity -> {
+                                    LivingEntity target = entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
+                                    if (!(target instanceof ServerPlayer player)) {
+                                        return 0;
+                                    }
+                                    int stigma = StigmaManager.getStigma(player);
+                                    return (60 * 20) / (stigma / 10);
+                                }),
+
+                        new PossessNearestLivingEntity<>()
+                                .distance(1.2d)
+                                .filter(e -> e instanceof Animal && !e.getPersistentData().getBoolean("tango_possessed")),
+
+                        new WalkToNearestLivingEntity<>()
+                                .speedModifier(2.0f)
+                                .filter(e -> e instanceof Animal && !e.getPersistentData().getBoolean("tango_possessed")),
+
+                        new AvoidEntitySpecific<>()
+                                .avoiding(e -> e instanceof Player)
+                                .noCloserThan(32.0f)
+                                .stopCaringAfter(32.0f)
+                                .speedModifier(2.0f)
                 ),
                 new OneRandomBehaviour<>(
+
                         new SetRandomWalkTarget<>(),
-                        new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))
-                )
+
+                        new Idle<>()
+                                .runFor(entity -> entity.getRandom().nextInt(30, 60))
+                ).startCondition(entity -> entity.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER).isEmpty() || entity.getPersistentData().getBoolean("possessing"))
         );
     }
 
     @Override
     public BrainActivityGroup<? extends TangoEntity> getFightTasks() {
         return BrainActivityGroup.fightTasks(
-                new InvalidateAttackTarget<TangoEntity>().invalidateIf((entity, target) -> !entity.getPersistentData().getBoolean("possessing")),
-                new SetWalkTargetToAttackTarget<TangoEntity>().speedMod((entity, target) -> 2.0f).startCondition(entity -> entity.getPersistentData().getBoolean("possessing")),
-                new AnimatableMeleeAttack<TangoEntity>(0).startCondition(entity -> entity.getPersistentData().getBoolean("possessing"))
+
+                new InvalidateAttackTarget<TangoEntity>()
+                        .invalidateIf((entity, target) -> !entity.getPersistentData().getBoolean("possessing")),
+
+                new SetWalkTargetToAttackTarget<TangoEntity>()
+                        .speedMod((entity, target) -> 1.5f)
+                        .startCondition(entity -> entity.getPersistentData().getBoolean("possessing")),
+
+                new AnimatableMeleeAttack<TangoEntity>(0)
+                        .startCondition(entity -> entity.getPersistentData().getBoolean("possessing"))
         );
     }
 
@@ -139,7 +184,7 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     @Override
     public boolean startRiding(Entity vehicle, boolean force) {
-        if (!(vehicle instanceof Animal)) {
+        if (!(vehicle instanceof Animal) || vehicle.getPersistentData().getBoolean("tango_possessed")) {
             return false;
         }
 
@@ -192,7 +237,7 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                 .add(Attributes.MAX_HEALTH, 5.0d)
                 .add(Attributes.ATTACK_DAMAGE, 5.0d)
                 .add(Attributes.MOVEMENT_SPEED, 0.23d)
-                .add(Attributes.FOLLOW_RANGE, 35.0);
+                .add(Attributes.FOLLOW_RANGE, 32.0);
     }
 
 }
