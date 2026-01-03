@@ -16,12 +16,14 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.somedom.taboo.block.ModBlocks;
+import net.somedom.taboo.component.ModDataComponents;
 import net.somedom.taboo.entity.ModEntities;
 import net.somedom.taboo.entity.client.EchoRenderer;
 import net.somedom.taboo.entity.client.TangoRenderer;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
 import net.somedom.taboo.manifestation.stigma.StigmaCommands;
+import net.somedom.taboo.util.ModItemProperties;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -52,6 +54,7 @@ public class Taboo {
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
+        ModDataComponents.DATA_COMPONENTS.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -81,6 +84,8 @@ public class Taboo {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+
+            event.enqueueWork(ModItemProperties::addCustomItemProperties);
 
             EntityRenderers.register(ModEntities.ECHO.get(), EchoRenderer::new);
             EntityRenderers.register(ModEntities.TANGO.get(), TangoRenderer::new);

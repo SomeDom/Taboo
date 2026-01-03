@@ -3,10 +3,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "taboo:item/emf_detector0",
-		"1": "taboo:item/emf_detector1",
-		"2": "taboo:item/emf_detector2",
-		"3": "taboo:item/emf_detector3"
+		"0": "taboo:item/emf_detector0"
 	},
 	"elements": [
 		{
@@ -149,5 +146,10 @@
 		"fixed": {
 			"translation": [0, 0, -1]
 		}
-	}
+	},
+	"overrides": [
+		{ "predicate": { "taboo:emf_level": 1.0 }, "model": "taboo:item/emf_reader_1" },
+		{ "predicate": { "taboo:emf_level": 2.0 }, "model": "taboo:item/emf_reader_2" },
+		{ "predicate": { "taboo:emf_level": 3.0 }, "model": "taboo:item/emf_reader_3" }
+	]
 }
