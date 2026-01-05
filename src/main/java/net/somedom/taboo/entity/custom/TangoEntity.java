@@ -76,8 +76,6 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
         tickBrain(this);
     }
 
-    //test
-
     @Override
     public List<ExtendedSensor<TangoEntity>> getSensors() {
         return ObjectArrayList.of(
