@@ -1,6 +1,7 @@
 package net.somedom.taboo.entity.custom;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -63,6 +64,15 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     @Override
     protected void customServerAiStep() {
+
+        if (getPersistentData().getBoolean("possessing") && !isInvisible()) {
+            setInvisible(true);
+        }
+
+        if (getPersistentData().getBoolean("possessing") && !isInvulnerable()) {
+            setInvulnerable(true);
+        }
+
         tickBrain(this);
     }
 
@@ -178,14 +188,16 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     @Override
     public boolean startRiding(Entity vehicle, boolean force) {
-        if (!(vehicle instanceof Animal) || vehicle.getPersistentData().getBoolean("tango_possessed")) {
-            return false;
+
+        if (!force && getPersistentData().getBoolean("possessing")) {
+            if (!(vehicle instanceof Animal) || vehicle.getPersistentData().getBoolean("tango_possessed")) {
+                return false;
+            }
         }
 
+        if (!getPersistentData().getBoolean("possessing")) {
         playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 0.5f, 1.5f);
-
-        setInvisible(true);
-        setInvulnerable(true);
+        }
 
         getPersistentData().putBoolean("possessing", true);
         vehicle.getPersistentData().putBoolean("tango_possessed", true);
@@ -195,6 +207,7 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     @Override
     public void stopRiding() {
+
         if (getVehicle() instanceof Entity entity) {
             if (!(entity instanceof Animal)) {
                 return;
@@ -210,6 +223,11 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
             entity.getPersistentData().putBoolean("tango_possessed", false);
         }
         super.stopRiding();
+    }
+
+    @Override
+    public boolean saveAsPassenger(CompoundTag compound) {
+        return super.saveAsPassenger(compound);
     }
 
     @Override

@@ -16,11 +16,11 @@ public class ModEntities {
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, Taboo.MOD_ID);
 
     public static final Supplier<EntityType<EchoEntity>> ECHO =
-            ENTITY_TYPES.register("echo", () -> EntityType.Builder.of(EchoEntity::new, MobCategory.MONSTER)
+            ENTITY_TYPES.register("echo", () -> EntityType.Builder.of(EchoEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 2.2f).build("echo"));
 
     public static final Supplier<EntityType<TangoEntity>> TANGO =
-            ENTITY_TYPES.register("tango", () -> EntityType.Builder.of(TangoEntity::new, MobCategory.MONSTER)
+            ENTITY_TYPES.register("tango", () -> EntityType.Builder.of(TangoEntity::new, MobCategory.CREATURE)
                     .sized(0.6f, 1.8f).build("tango"));
 
     public static void register(IEventBus eventBus) {
