@@ -64,15 +64,6 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     @Override
     protected void customServerAiStep() {
-
-        if (getPersistentData().getBoolean("possessing") && !isInvisible()) {
-            setInvisible(true);
-        }
-
-        if (getPersistentData().getBoolean("possessing") && !isInvulnerable()) {
-            setInvulnerable(true);
-        }
-
         tickBrain(this);
     }
 
@@ -194,6 +185,9 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                 return false;
             }
         }
+
+        setInvisible(true);
+        setInvulnerable(true);
 
         if (!getPersistentData().getBoolean("possessing")) {
         playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 0.5f, 1.5f);
