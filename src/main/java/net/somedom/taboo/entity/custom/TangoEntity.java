@@ -224,6 +224,25 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
         return super.saveAsPassenger(compound);
     }
 
+    //------
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("possessing", getPersistentData().getBoolean("possessing"));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.getBoolean("possessing")) {
+            setInvisible(true);
+            setInvulnerable(true);
+        }
+    }
+
+    //------
+
     @Override
     public boolean hurt(DamageSource damageSource, float v) {
         if (!this.level().isClientSide) {
