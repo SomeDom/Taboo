@@ -2,6 +2,7 @@ package net.somedom.taboo.entity.custom;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.somedom.taboo.entity.behavior.AvoidEntitySpecific;
 import net.somedom.taboo.entity.behavior.PossessNearestLivingEntity;
+import net.somedom.taboo.entity.behavior.TangoPathNavigation;
 import net.somedom.taboo.entity.behavior.WalkToNearestLivingEntity;
 import net.somedom.taboo.manifestation.stigma.StigmaManager;
 import net.tslat.smartbrainlib.api.SmartBrainOwner;
@@ -54,7 +56,7 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        return new SmoothAmphibiousPathNavigation(this, level);
+        return new TangoPathNavigation(this, level);
     }
 
     @Override
@@ -186,8 +188,8 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
             }
         }
 
-        setInvisible(true);
-        setInvulnerable(true);
+        //setInvisible(true);
+        //setInvulnerable(true);
 
         if (!getPersistentData().getBoolean("possessing")) {
         playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 0.5f, 1.5f);
@@ -224,24 +226,15 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
         return super.saveAsPassenger(compound);
     }
 
-    //------
-
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("possessing", getPersistentData().getBoolean("possessing"));
+    public boolean isInvisible() {
+        return getPersistentData().getBoolean("possessing") || super.isInvisible();
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.getBoolean("possessing")) {
-            setInvisible(true);
-            setInvulnerable(true);
-        }
+    public boolean isInvulnerable() {
+        return getPersistentData().getBoolean("possessing") || super.isInvulnerable();
     }
-
-    //------
 
     @Override
     public boolean hurt(DamageSource damageSource, float v) {
