@@ -18,6 +18,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.somedom.taboo.effect.ModEffects;
 import net.somedom.taboo.entity.behavior.AvoidEntitySpecific;
 import net.somedom.taboo.entity.behavior.PossessNearestLivingEntity;
 import net.somedom.taboo.entity.behavior.TangoPathNavigation;
@@ -111,11 +112,15 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
 
                         new PossessNearestLivingEntity<>()
                                 .distance(1.2d)
-                                .filter(e -> e instanceof Animal && !e.getPersistentData().getBoolean("tango_possessed")),
+                                .filter(e -> e instanceof Animal
+                                        && !e.getPersistentData().getBoolean("tango_possessed")
+                                        && !e.hasEffect(ModEffects.GRACE)),
 
                         new WalkToNearestLivingEntity<>()
                                 .speedModifier(2.0f)
-                                .filter(e -> e instanceof Animal && !e.getPersistentData().getBoolean("tango_possessed")),
+                                .filter(e -> e instanceof Animal
+                                        && !e.getPersistentData().getBoolean("tango_possessed")
+                                        && !e.hasEffect(ModEffects.GRACE)),
 
                         new AvoidEntitySpecific<>()
                                 .avoiding(e -> e instanceof Player)
@@ -147,6 +152,16 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
                 new AnimatableMeleeAttack<TangoEntity>(0)
                         .startCondition(entity -> entity.getPersistentData().getBoolean("possessing"))
         );
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!level().isClientSide() && getPersistentData().getBoolean("possessing")) {
+            if (getVehicle() instanceof LivingEntity living && living.hasEffect(ModEffects.GRACE)) {
+                stopRiding();
+            }
+        }
     }
 
     @Override

@@ -1,6 +1,15 @@
 {
   "block.taboo.salt": "Salt",
+
   "item.taboo.emf_reader": "EMF Reader",
+
+  "item.minecraft.potion.effect.taboo_holy_water": "Holy Water",
+  "item.minecraft.splash_potion.effect.taboo_holy_water": "Holy Water",
+  "item.minecraft.lingering_potion.effect.taboo_holy_water": "Holy Water",
+  "item.minecraft.tipped_arrow.effect.taboo_holy_water": "Holy Water Tipped Arrow",
+
+  "effect.taboo.grace": "Grace",
+
 
   "entity.taboo.wendigo": "Wendigo"
 }

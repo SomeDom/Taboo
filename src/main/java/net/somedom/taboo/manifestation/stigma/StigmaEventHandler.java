@@ -1,5 +1,6 @@
 package net.somedom.taboo.manifestation.stigma;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -18,6 +20,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEnchantItemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.somedom.taboo.Taboo;
+import net.somedom.taboo.potion.ModPotions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,11 +85,15 @@ public class StigmaEventHandler {
                 StigmaManager.addStigma(player, 3, true);
             }
 
-            if (
-                item.getItem() == Items.SUSPICIOUS_STEW ||
-                item.getItem() == Items.POTION
-            ) {
+            if (item.getItem() == Items.SUSPICIOUS_STEW) {
                 StigmaManager.addStigma(player, 5, true);
+            }
+
+            if (item.getItem() == Items.POTION) {
+                PotionContents contents = item.get(DataComponents.POTION_CONTENTS);
+                if (contents == null || !contents.is(ModPotions.HOLY_WATER)) {
+                    StigmaManager.addStigma(player, 5, true);
+                }
             }
         }
     }
@@ -106,7 +113,10 @@ public class StigmaEventHandler {
             }
 
             if (item.getItem() == Items.SPLASH_POTION) {
-                StigmaManager.addStigma(player, 3, true);
+                PotionContents contents = item.get(DataComponents.POTION_CONTENTS);
+                if (contents == null || !contents.is(ModPotions.HOLY_WATER)) {
+                    StigmaManager.addStigma(player, 3, true);
+                }
             }
         }
     }

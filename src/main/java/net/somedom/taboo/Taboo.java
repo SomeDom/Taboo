@@ -17,12 +17,14 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.somedom.taboo.block.ModBlocks;
 import net.somedom.taboo.component.ModDataComponents;
+import net.somedom.taboo.effect.ModEffects;
 import net.somedom.taboo.entity.ModEntities;
 import net.somedom.taboo.entity.client.EchoRenderer;
 import net.somedom.taboo.entity.client.TangoRenderer;
 import net.somedom.taboo.item.ModItems;
 import net.somedom.taboo.loot.ModLootModifiers;
 import net.somedom.taboo.manifestation.stigma.StigmaCommands;
+import net.somedom.taboo.potion.ModPotions;
 import net.somedom.taboo.util.ModItemProperties;
 import org.slf4j.Logger;
 
@@ -51,6 +53,9 @@ public class Taboo {
         ModLootModifiers.register(modEventBus);
 
         ModEntities.register(modEventBus);
+
+        ModEffects.register(modEventBus);
+        ModPotions.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
