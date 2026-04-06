@@ -33,7 +33,7 @@ public class TangoPathNavigation extends SmoothAmphibiousPathNavigation {
             @Override
             protected boolean isDiagonalValid(Node root, @Nullable Node xNode, @Nullable Node zNode) {
                 if (isSaltNode(xNode) || isSaltNode(zNode)) {
-                    return true; // let the diagonal node be evaluated on its own merits
+                    return true;
                 }
                 return super.isDiagonalValid(root, xNode, zNode);
             }

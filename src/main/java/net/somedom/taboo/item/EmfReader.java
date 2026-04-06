@@ -1,4 +1,5 @@
 package net.somedom.taboo.item;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -26,6 +27,12 @@ public class EmfReader extends Item {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
 
+        if (!(entity instanceof LivingEntity living) ||
+            (living.getMainHandItem() != stack && living.getOffhandItem() != stack)) {
+            stack.set(ModDataComponents.EMF_LEVEL, 0);
+            return;
+        }
+
         if (level instanceof ServerLevel serverLevel) {
 
             AABB testArea = new AABB(entity.blockPosition()).inflate(32);
@@ -48,6 +55,20 @@ public class EmfReader extends Item {
 
             stack.set(ModDataComponents.EMF_LEVEL, emfLevel);
         }
+
+        if (level.isClientSide()) {
+            int emfLevel = stack.getOrDefault(ModDataComponents.EMF_LEVEL, 0);
+
+            if (emfLevel == 3 && entity.tickCount % 5 == 0) {
+                entity.playSound(SoundEvents.NOTE_BLOCK_BIT.value(), 1.0f, 2.0f);
+            }
+            else if (emfLevel == 2 && entity.tickCount % 10 == 0) {
+                entity.playSound(SoundEvents.NOTE_BLOCK_BIT.value(), 1.0f, 1.0f);
+            }
+            else if (emfLevel == 1 && entity.tickCount % 20 == 0) {
+                entity.playSound(SoundEvents.NOTE_BLOCK_BIT.value(), 1.0f, 0.0f);
+            }
+        }
     }
 
     @Override
@@ -55,13 +76,6 @@ public class EmfReader extends Item {
         if (slotChanged) return true;
 
         return !ItemStack.isSameItem(oldStack, newStack);
-    }
-
-    @Override
-    public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
-        stack.set(ModDataComponents.EMF_LEVEL, 0);
-
-        super.onStopUsing(stack, entity, count);
     }
 
     @Override

@@ -28,6 +28,11 @@ public class StigmaEventHandler {
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
+
+        if (event.getEntity() instanceof ServerPlayer player) {
+            StigmaManager.setStigma(player, StigmaManager.getStigma(player)/2);
+        }
+
         if (event.getSource().getEntity() instanceof ServerPlayer player) {
             LivingEntity victim = event.getEntity();
 
