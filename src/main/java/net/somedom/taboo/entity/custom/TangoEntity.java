@@ -203,9 +203,6 @@ public class TangoEntity extends PathfinderMob implements SmartBrainOwner <Tango
             }
         }
 
-        //setInvisible(true);
-        //setInvulnerable(true);
-
         if (!getPersistentData().getBoolean("possessing")) {
         playSound(SoundEvents.ZOMBIE_VILLAGER_CURE, 0.5f, 1.5f);
         }
